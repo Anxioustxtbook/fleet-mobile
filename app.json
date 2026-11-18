@@ -1,0 +1,85 @@
+{
+  "expo": {
+    "name": "FleetPilot",
+    "slug": "fleetpilot2",
+    "version": "0.1.2",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/a770274d-854a-44b5-8883-e98441632050"
+    },
+    "platforms": [
+      "android",
+      "ios",
+      "web"
+    ],
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "android": {
+      "package": "com.fleetpilot.mobile",
+      "versionCode": 3,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.ACCESS_WIFI_STATE",
+        "android.permission.WAKE_LOCK",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      }
+    },
+    "plugins": [
+      "expo-sqlite",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "FleetPilot uses photos only when you choose a picture for a vehicle, client, profile, or dashboard.",
+          "cameraPermission": "FleetPilot uses the camera only to scan the pairing code shown on the computer.",
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "FleetPilot uses the camera only to scan the pairing code shown on the computer."
+        }
+      ],
+      "expo-sharing",
+      "expo-notifications",
+      "expo-font",
+      "expo-updates",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/logo.png",
+          "imageWidth": 160,
+          "resizeMode": "contain",
+          "backgroundColor": "#000000",
+          "dark": {
+            "image": "./assets/logo.png",
+            "backgroundColor": "#000000"
+          }
+        }
+      ]
+    ],
+    "icon": "./assets/icon.png",
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "65a19e7b-c339-4172-9c9f-7df07b8a0e19"
+      }
+    },
+    "owner": "albertkipchirchir",
+    "ios": {}
+  }
+}

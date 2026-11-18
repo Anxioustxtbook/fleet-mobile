@@ -1,0 +1,11 @@
+﻿node_modules/
+.git/
+.expo/
+android/
+ios/
+dist/
+dist-mobile/
+dist-web/
+
+# leftover template folder
+fleetpilot/
