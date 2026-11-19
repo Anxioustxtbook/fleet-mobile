@@ -13,13 +13,14 @@ test('count-up eases from zero to positive, fractional and negative targets', ()
   assert.ok(countUpValue(100, 0.5) > 50);
 });
 
-test('shared numeric displays animate screen totals and respect reduced motion', async () => {
+test('shared numeric displays animate screen totals smoothly and respect reduced motion', async () => {
   const kit = await readFile(new URL('../src/ui/kit.js', import.meta.url), 'utf8');
   assert.match(kit, /isReduceMotionEnabled/);
   assert.match(kit, /const appReady = useContext\(AppReady\)/);
-  assert.match(kit, /countUpValue\(Number\(value\), k\)/);
+  assert.match(kit, /const shownRef = useRef\(null\), didAnimate = useRef\(false\)/);
+  assert.match(kit, /from \+ \(target - from\) \* progress/);
+  assert.doesNotMatch(kit, /CountRefreshContext|refreshVersion/);
   assert.match(kit, /export function StatsStrip/);
-  assert.match(kit, /CountRefreshContext/);
   for (const screen of ['Home', 'Dashboard', 'FuelScreen', 'CoopScreen', 'ListScreen', 'Overdue', 'Performance', 'Reports', 'Audit', 'Analysis']) {
     const source = await readFile(new URL(`../src/ui/screens/${screen}.js`, import.meta.url), 'utf8');
     assert.match(source, /CountText|CountValue|StatsStrip/, `${screen} should use the shared count-up display`);

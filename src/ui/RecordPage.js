@@ -33,6 +33,8 @@ export function RecordBody({ list, id }) {
   if (!rec) return <T size={15} tone="dim" align="center" style={{ padding: sc(28) }}>This record is no longer here.</T>;
 
   const reg = isRegister(list), exited = isExited(list, rec), uri = photoUri(look, list, id), key = photoKey(list, id);
+  const rentalVehicle = list === 'rentals' ? (data.vehicles || []).find(vehicle => String(vehicle.id) === String(rec.vehicleId)) : null;
+  const rentalVehiclePhoto = rentalVehicle ? photoUri(look, 'vehicles', rentalVehicle.id) : '';
   const form = formIdFor(list, rec), blocked = editBlocked(list, rec), items = describeRecord(rec, data).filter(x => x.key !== 'photo');
   const addPhoto = async () => {
     try { const r = await pickPhoto(key); if (!r) return; if (r.ok === false) { toast('Allow photo access in the phone settings to add a picture'); return; } await look.setPhoto(key, r.uri); if (uri) await deletePhotoFile(uri); toast('Picture saved on this phone'); }
@@ -73,6 +75,11 @@ export function RecordBody({ list, id }) {
             <T size={12.5} tone="dim" align="center" style={{ marginTop: sc(8) }}>Kept on this phone only. It is not sent to the computer.</T>
           </View>
           <View style={{ flexDirection: 'row', gap: sc(12) }}><Btn label={uri ? 'Change picture' : 'Add picture'} onPress={addPhoto} />{uri ? <Btn label="Remove" onPress={removePhoto} /> : null}</View>
+        </DetailCard>
+      ) : null}
+      {rentalVehiclePhoto ? (
+        <DetailCard title={`Vehicle${rentalVehicle && rentalVehicle.reg ? ` · ${rentalVehicle.reg}` : ''}`}>
+          <Image source={{ uri: rentalVehiclePhoto }} style={{ width: '100%', height: sc(180), borderRadius: sc(14) }} resizeMode="cover" accessibilityLabel="Rental vehicle photo" />
         </DetailCard>
       ) : null}
       <DetailCard title="Details"><KV items={items.map(x => [x.label, x.value])} /></DetailCard>

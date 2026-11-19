@@ -39,10 +39,13 @@ test('menu and Add sheets expand by dragging, and expanded Add exposes phone-onl
   assert.match(shell, /onMoveShouldSetPanResponderCapture/);
   assert.match(shell, /onPress=\{\(\) => snap\(expanded \? 0 : 1\)\}/);
   assert.match(shell, /Swipe up for quick notes/);
-  assert.match(shell, /expanded \? 'Swipe down to collapse' : 'Swipe up for quick notes'/);
+  assert.match(shell, /gesture\.dy > H \* 0\.12/);
+  assert.match(shell, /expanded \? 'Swipe down to close' : 'Swipe up for quick notes'/);
   assert.match(shell, /<T size=\{16\} weight="700">Quick notes<\/T>/);
   assert.match(shell, /value=\{look\.prefs\.notes \|\| ''\}/);
   assert.match(shell, /onChangeText=\{look\.setNotes\}/);
+  assert.match(kit, /gesture\.dy > height \* 0\.12/);
+  assert.match(kit, /Swipe up to expand and down to close/);
   assert.match(prefs, /notes: typeof r\.notes === 'string'/);
 });
 

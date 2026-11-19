@@ -10,7 +10,7 @@ import { createPlatform } from '../platform.js';
 import { createApp } from '../app.js';
 import { barState, canSync } from './logic.js';
 import { popHistory, pushHistory } from './nav.js';
-import { CountRefreshProvider, useToast } from './kit.js';
+import { useToast } from './kit.js';
 import { useLook, useTheme as useLookTheme } from './look.js';
 import {
   DEFAULT_NOTIFICATION_SETTINGS,
@@ -51,7 +51,6 @@ export function SessionProvider({ children }) {
   const screenRef = useRef('home'); screenRef.current = screen;
 
   const [version, setVersion] = useState(0);                       // goes up after every refresh, so screens read their lists again after a save
-  const [pullRefreshVersion, setPullRefreshVersion] = useState(0);
   const say = useCallback(text => { toast(text); }, [toast]);
 
   /* a problem, in the words the phone already made for it */
@@ -77,7 +76,6 @@ export function SessionProvider({ children }) {
   }, [notify, scheduleReminders]);
   const pullRefresh = useCallback(async () => {
     await refresh();
-    setPullRefreshVersion(value => value + 1);
   }, [refresh]);
 
   const setNotificationSettingsPreference = useCallback(async value => {
@@ -250,7 +248,7 @@ export function SessionProvider({ children }) {
       go, goBack, openPage, closePage, openSheet, closeSheet, openForm, closeForm, setMenuOpen: v => setSheet(v ? 'menu' : null),
       setHelpOpen, refresh, pullRefresh, say, notify, pairWith, firstCopy, sync, unpair
     }}>
-      <CountRefreshProvider value={pullRefreshVersion}>{children}</CountRefreshProvider>
+      {children}
     </Session.Provider>
   );
 }

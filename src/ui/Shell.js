@@ -161,7 +161,7 @@ function AddSheet() {
     onPanResponderMove: (event, gesture) => progress.setValue(Math.max(0, Math.min(1, startProgress.current - gesture.dy / Math.max(1, H * 0.3)))),
     onPanResponderRelease: (event, gesture) => {
       const next = Math.max(0, Math.min(1, startProgress.current - gesture.dy / Math.max(1, H * 0.3)));
-      if (startProgress.current < 0.1 && gesture.dy > H * 0.16) { s.closeSheet(); return; }
+      if (gesture.dy > H * 0.12 || gesture.dy > 24 && gesture.vy > 0.8) { s.closeSheet(); return; }
       snap(next >= 0.5 ? 1 : 0);
     },
     onPanResponderTerminate: () => snap(startProgress.current >= 0.5 ? 1 : 0)
@@ -180,11 +180,11 @@ function AddSheet() {
           <Animated.View style={{ height: sheetHeight, maxHeight: H * 0.94, transform: [{ translateY: up.interpolate({ inputRange: [0, 1], outputRange: [H * 0.5, 0] }) }], backgroundColor: t.card,
             borderTopLeftRadius: sc(SIZE.radius.sheet), borderTopRightRadius: sc(SIZE.radius.sheet), borderTopWidth: 1, borderTopColor: t.line, overflow: 'hidden' }}>
             <Pressable onPress={() => {}} style={{ flex: 1, paddingBottom: insets.bottom }}>
-              <Pressable {...pan.panHandlers} accessible accessibilityRole="button" accessibilityLabel={expanded ? 'Collapse Add sheet' : 'Open Quick notes'}
+              <Pressable {...pan.panHandlers} accessible accessibilityRole="button" accessibilityLabel={expanded ? 'Close Add sheet' : 'Open Quick notes or close Add sheet'}
                 onPress={() => snap(expanded ? 0 : 1)}
                 style={{ minHeight: sc(54), alignItems: 'center', justifyContent: 'center', paddingTop: sc(8), paddingBottom: sc(5), gap: sc(4) }}>
                 <View style={{ width: sc(70), height: sc(5), borderRadius: sc(3), backgroundColor: t.line }} />
-                <T size={11} tone="dim">{expanded ? 'Swipe down to collapse' : 'Swipe up for quick notes'}</T>
+                <T size={11} tone="dim">{expanded ? 'Swipe down to close' : 'Swipe up for quick notes'}</T>
               </Pressable>
               <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingHorizontal: sc(18), paddingTop: sc(8), paddingBottom: sc(18) }} keyboardShouldPersistTaps="handled">
                 <View style={{ paddingBottom: sc(18) }}>

@@ -20,12 +20,6 @@ import { FIXED, SIZE } from './theme.js';
 
 const shadow = (t, s) => ({ shadowColor: t.shadowColor, shadowOpacity: t.shadowOpacity, shadowRadius: s(10), shadowOffset: { width: 0, height: s(6) }, elevation: 3 });
 const em = (px, e) => px * e;
-const CountRefreshContext = createContext(0);
-
-export function CountRefreshProvider({ children, value }) {
-  return <CountRefreshContext.Provider value={value}>{children}</CountRefreshContext.Provider>;
-}
-
 /* ---------------------------------------------------------------- text */
 /* the one text piece: size in prototype pixels, weight, tone, number font */
 export function T({ children, size = 15, weight = '400', tone = 'ink', mono, upper, spacing, style, numberOfLines, align }) {
@@ -384,7 +378,7 @@ export function Sheet({ visible, onClose, children, footer, draggable = false })
     },
     onPanResponderRelease: (event, gesture) => {
       const next = Math.max(0, Math.min(1, startProgress.current - gesture.dy / Math.max(1, height * 0.24)));
-      if (startProgress.current < 0.1 && gesture.dy > height * 0.16) { onClose(); return; }
+      if (gesture.dy > height * 0.12 || gesture.dy > 24 && gesture.vy > 0.8) { onClose(); return; }
       snap(next >= 0.5 ? 1 : 0);
     },
     onPanResponderTerminate: () => snap(startProgress.current >= 0.5 ? 1 : 0)
@@ -396,7 +390,7 @@ export function Sheet({ visible, onClose, children, footer, draggable = false })
         <Animated.View style={[{ maxHeight: '92%', backgroundColor: t.card, borderTopLeftRadius: s(SIZE.radius.sheet), borderTopRightRadius: s(SIZE.radius.sheet), borderTopWidth: 1, borderTopColor: t.line, overflow: 'hidden' }, draggable ? { height: sheetHeight } : null]}>
           <Pressable onPress={() => {}} style={draggable ? { flex: 1 } : { maxHeight: '100%' }}>
             <View {...(draggable ? pan.panHandlers : {})} accessible={draggable} accessibilityRole={draggable ? 'adjustable' : undefined}
-              accessibilityLabel={draggable ? 'Menu sheet. Swipe up to expand and down to collapse.' : undefined}>
+              accessibilityLabel={draggable ? 'Menu sheet. Swipe up to expand and down to close.' : undefined}>
               <View style={{ width: s(70), height: s(5), borderRadius: s(3), backgroundColor: t.line, alignSelf: 'center', marginTop: s(12), marginBottom: s(6) }} />
             </View>
             <ScrollView style={draggable ? { flex: 1 } : { flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: s(18), paddingTop: s(8), paddingBottom: footer ? s(18) : s(18) + insets.bottom }} keyboardShouldPersistTaps="handled">
@@ -601,19 +595,32 @@ export function TableCard({ head, rows, total, onRow, onCell }) {
 
 /* a number that counts up from 0 over 0.9 seconds when the screen opens (skipped when the phone asks for less motion) */
 export function CountText({ value, format = n => String(Math.round(n)), delay = 0, ...textProps }) {
-  const appReady = useContext(AppReady), refreshVersion = useContext(CountRefreshContext);
+  const appReady = useContext(AppReady);
   const [shown, setShown] = useState(null);
+  const shownRef = useRef(null), didAnimate = useRef(false);
   useEffect(() => {
     let raf, off = false;
-    if (!appReady) { setShown(value); return () => { off = true; }; }
+    const setCurrent = next => { shownRef.current = next; setShown(next); };
+    const target = Number(value);
+    if (!Number.isFinite(target)) { setCurrent(value); return () => { off = true; }; }
+    if (!appReady) { setCurrent(target); didAnimate.current = false; return () => { off = true; }; }
     AccessibilityInfo.isReduceMotionEnabled().then(reduce => {
-      if (off || reduce || !Number.isFinite(Number(value)) || Number(value) === 0) { setShown(value); return; }
+      if (off) return;
+      const from = didAnimate.current && Number.isFinite(Number(shownRef.current)) ? Number(shownRef.current) : 0;
+      if (reduce || target === 0 || from === target) { setCurrent(target); didAnimate.current = true; return; }
+      didAnimate.current = true;
       const t0 = Date.now() + delay, D = 900;
-      const step = () => { const k = (Date.now() - t0) / D; setShown(countUpValue(Number(value), k)); if (k < 1 && !off) raf = requestAnimationFrame(step); };
+      const step = () => {
+        const k = (Date.now() - t0) / D;
+        const progress = countUpValue(1, k);
+        setCurrent(from + (target - from) * progress);
+        if (k < 1 && !off) raf = requestAnimationFrame(step);
+        else if (!off) setCurrent(target);
+      };
       step();
-    }).catch(() => setShown(value));
+    }).catch(() => { if (!off) { setCurrent(target); didAnimate.current = true; } });
     return () => { off = true; if (raf) cancelAnimationFrame(raf); };
-  }, [appReady, value, delay, refreshVersion]);
+  }, [appReady, value, delay]);
   return <T {...textProps}>{format(shown == null ? 0 : shown)}</T>;
 }
 

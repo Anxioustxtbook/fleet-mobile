@@ -150,10 +150,13 @@ test('records waiting are counted from the existing change log, without touching
 test('Home vehicle markers use photos when available', () => {
   const thumb = read('../src/ui/Thumb.js');
   const home = read('../src/ui/screens/Home.js');
+  const recordPage = read('../src/ui/RecordPage.js');
   assert.match(thumb, /export function VehicleMarker/);
   assert.match(thumb, /photoUri\(look, 'vehicles', vehicleId\)/);
   assert.match(home, /<VehicleMarker vehicleId=\{c\.vehicleId\}/);
   assert.match(home, /<VehicleMarker vehicleId=\{o\.vehicleId\}/);
+  assert.match(recordPage, /photoUri\(look, 'vehicles', rentalVehicle\.id\)/);
+  assert.match(recordPage, /accessibilityLabel="Rental vehicle photo"/);
 });
 
 test('Needs attention and list view controls are implemented', () => {
