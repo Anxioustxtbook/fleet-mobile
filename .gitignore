@@ -1,10 +1,5 @@
 node_modules/
-.expo/
-android/
-ios/
 dist/
-*.log
-
-
-dist-web/
-dist-mobile/
+build/
+release/
+release-updated/

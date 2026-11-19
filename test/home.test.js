@@ -147,6 +147,15 @@ test('records waiting are counted from the existing change log, without touching
   const src = read('../src/ui/syncState.js'); assert.ok(/localChanges\(\)/.test(src));
 });
 
+test('Needs attention and list view controls are implemented', () => {
+  const app = read('../App.js');
+  const nav = read('../src/ui/nav.js');
+  const list = read('../src/ui/listView.js');
+  assert.match(app, /alerts: NeedsAttention/);
+  assert.ok(!/alerts: 'Step 7'/.test(nav));
+  for (const id of ['vehicles', 'drivers', 'clients', 'bookings', 'rentals', 'payments', 'expenses', 'subhire']) assert.ok(list.includes(''));
+});
+
 test('Dave guides the mobile MVP tour through entry, records, Performance, Fuel and Coop', () => {
   assert.deepEqual(TOUR.map(s => s.screen), ['home', 'home', 'rentals', 'performance', 'fuel', 'coop']);
   assert.deepEqual(TOUR.map(s => s.target), ['home', 'fab', 'recordsHead', 'performance', 'fuel', 'coop']);

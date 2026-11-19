@@ -1,5 +1,5 @@
 /* Pure helpers for the list screens: month cards, totals strips and badge colours. */
-export const FULL_LIST = ['rentals', 'subhire'];
+export const FULL_LIST = ['vehicles', 'drivers', 'clients', 'bookings', 'rentals', 'payments', 'expenses', 'subhire'];
 const REG_STATUS = { Available: 'ok', Rented: 'bl', Maintenance: 'am', Inactive: 'nt', Active: 'ok' };
 export const badgeKind = (id, row) => (row.tagTone === 'ok' ? 'ok' : row.tagTone === 'bad' ? 'bad' : row.tagTone === 'amber' ? 'am' : REG_STATUS[row.tag] || (id === 'bookings' ? (row.tag === 'Confirmed' ? 'ok' : row.tag === 'Cancelled' ? 'bad' : 'am') : id === 'fuel' ? (row.tag === 'Ola' ? 'gd' : row.tag === 'Outside' ? 'bl' : 'nt') : 'nt'));
 

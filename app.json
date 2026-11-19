@@ -2,7 +2,7 @@
   "expo": {
     "name": "FleetPilot",
     "slug": "fleetpilot2",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "runtimeVersion": {
       "policy": "appVersion"
     },
@@ -20,7 +20,7 @@
     "userInterfaceStyle": "automatic",
     "android": {
       "package": "com.fleetpilot.mobile",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": [
         "android.permission.INTERNET",
         "android.permission.ACCESS_NETWORK_STATE",
@@ -36,6 +36,7 @@
       }
     },
     "plugins": [
+      "./plugins/withAndroidCleartextTraffic",
       "expo-sqlite",
       "expo-secure-store",
       [

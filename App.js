@@ -20,6 +20,7 @@ import Placeholder from './src/ui/screens/Placeholder.js';
 import FuelScreen from './src/ui/screens/FuelScreen.js';
 import CoopScreen from './src/ui/screens/CoopScreen.js';
 import Overdue from './src/ui/screens/Overdue.js';
+import NeedsAttention from './src/ui/screens/NeedsAttention.js';
 import ListScreen from './src/ui/screens/ListScreen.js';
 import Files from './src/ui/screens/Files.js';
 import Notifications from './src/ui/screens/Notifications.js';
@@ -31,7 +32,7 @@ import Performance from './src/ui/screens/Performance.js';
 import Reports from './src/ui/screens/Reports.js';
 import { isTable } from './src/ui/tables.js';
 
-const SCREENS = { home: Home, dashboard: Dashboard, deskdash: Dashboard, connect: Connect, review: Review, syncOverview: SyncOverview, pilot: Pilot, audit: Audit, analysis: Analysis, calendar: Calendar, performance: Performance, reports: Reports, overdue: Overdue, files: Files, notifs: Notifications };   // the tables use ListScreen
+const SCREENS = { home: Home, dashboard: Dashboard, deskdash: Dashboard, connect: Connect, review: Review, syncOverview: SyncOverview, pilot: Pilot, audit: Audit, analysis: Analysis, calendar: Calendar, performance: Performance, reports: Reports, overdue: Overdue, alerts: NeedsAttention, files: Files, notifs: Notifications };   // the tables use ListScreen
 
 function Body() {
   const s = useSession(), t = useTheme();

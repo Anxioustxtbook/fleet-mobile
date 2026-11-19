@@ -1,7 +1,7 @@
 /* Every fixed setting in one place. Nothing else in the app hard-codes these numbers. */
 
 export const APP_NAME = 'FleetPilot Mobile';
-export const APP_VERSION = '0.1.1';
+export const APP_VERSION = '0.1.3';
 export const ANDROID_PACKAGE = 'com.fleetpilot.mobile';
 
 /* The sync message protocol (SYNC_SPEC.md). A different number is refused by the desktop with "update the app". */

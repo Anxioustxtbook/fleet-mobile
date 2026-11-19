@@ -42,7 +42,7 @@ export const LABELS = {
 };
 
 /* which step of the rebuild brings each screen in its new look (for the "not here yet" page) */
-export const ARRIVES = { files: 'Step 6', alerts: 'Step 7', notifs: 'Step 7' };
+export const ARRIVES = { files: 'Step 6', notifs: 'Step 7' };
 
 /* ---------- the back history ---------- */
 export function pushHistory(history, cur, next, noHistory) {
