@@ -147,6 +147,15 @@ test('records waiting are counted from the existing change log, without touching
   const src = read('../src/ui/syncState.js'); assert.ok(/localChanges\(\)/.test(src));
 });
 
+test('Home vehicle markers use photos when available', () => {
+  const thumb = read('../src/ui/Thumb.js');
+  const home = read('../src/ui/screens/Home.js');
+  assert.match(thumb, /export function VehicleMarker/);
+  assert.match(thumb, /photoUri\(look, 'vehicles', vehicleId\)/);
+  assert.match(home, /<VehicleMarker vehicleId=\{c\.vehicleId\}/);
+  assert.match(home, /<VehicleMarker vehicleId=\{o\.vehicleId\}/);
+});
+
 test('Needs attention and list view controls are implemented', () => {
   const app = read('../App.js');
   const nav = read('../src/ui/nav.js');

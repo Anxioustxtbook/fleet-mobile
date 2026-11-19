@@ -19,6 +19,7 @@ import { plural } from '../dates.js';
 import { openAccount } from '../Pages.js';
 import { targetRef } from '../Tour.js';
 import { openRecord } from '../RecordPage.js';
+import { VehicleMarker } from '../Thumb.js';
 import { dsh } from '../dates.js';
 
 const LOGO = require('../../../assets/logo.png');
@@ -161,7 +162,7 @@ function ByCar({ b, privacyHidden }) {
         : view === 'sum' ? (
           <Card flush>
             {b.cars.map(c => (
-              <Row key={String(c.vehicleId)} dot={carColour(c.colour)} title={`${c.reg}${c.model ? ' · ' + c.model : ''}`} sub={`${plural(c.rentals, 'rental')} · ${plural(c.days, 'day')} · fuel ${ksh0(c.fuel)}`}
+              <Row key={String(c.vehicleId)} leading={<VehicleMarker vehicleId={c.vehicleId} dot={carColour(c.colour)} />} title={`${c.reg}${c.model ? ' · ' + c.model : ''}`} sub={`${plural(c.rentals, 'rental')} · ${plural(c.days, 'day')} · fuel ${ksh0(c.fuel)}`}
                 extra={<Progress pct={Math.round(100 * c.billed / mx)} />}
                 right={<><PrivacyValue hidden={privacyHidden}><CountValue value={c.billed} format={ksh0} /></PrivacyValue><PrivacyValue hidden={privacyHidden}><T size={12} tone={c.net < 0 ? 'red' : 'green'}>{`net ${ksh0(c.net)}`}</T></PrivacyValue></>} />
             ))}
@@ -274,7 +275,7 @@ export default function Home() {
       {out.length ? (
         <Card flush>
           {out.slice(0, 8).map((o, i, a) => (
-            <Row key={o.id} last={i === a.length - 1} dot={carColour(o.colour)} title={`${o.reg}${o.model ? ' · ' + o.model : ''}`}
+            <Row key={o.id} last={i === a.length - 1} leading={<VehicleMarker vehicleId={o.vehicleId} dot={carColour(o.colour)} />} title={`${o.reg}${o.model ? ' · ' + o.model : ''}`}
               sub={`${o.client}${o.owed ? ' · owes ' + ksh0(o.owed) : ''}`} right={<Badge text={o.badge.text} kind={o.badge.kind} />}
               onPress={() => openRecord(S, { list: 'rentals', id: o.id, title: `${o.reg} · ${o.client}` })} />
           ))}
